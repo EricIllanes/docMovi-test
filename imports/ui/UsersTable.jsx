@@ -14,7 +14,7 @@ export default UsersTable = () => {
     "Región",
     "Comuna",
     "Cód. Postal",
-    "Eliminar",
+    "Borrar Usuario",
   ];
 
   const deleteUser = (value) => {
@@ -22,15 +22,13 @@ export default UsersTable = () => {
   };
 
   return (
-    <div className=" flex justify-center pb-12">
+    <div className=" w-full flex justify-center pb-12">
       {users.length !== 0 ? (
-        // <div className="bg-sky-500 flex justify-center mx-4 sm:-mx-8 px-4 sm:px-8 py-4 overflow-x-auto">
-        //<div className=" flex justify-center inline-block min-w-full shadow rounded-lg overflow-hidden my-10">
-        <table className="w-3/4 leading-normal pb-8">
-          <thead className="px-5 py-3 h-16 border-b-2 border-cyan-300 rounded-lg bg-slate-50 text-center text-sky-900 text-xs font-semibold text-gray-600 uppercase tracking-wider  ">
+        <table className="w-2/3 leading-normal pb-8">
+          <thead className="px-5 py-3 h-16 border-b-2 border-blue-200 rounded-lg bg-gray-200 text-center text-pink-500 text-xs font-semibold text-gray-600 uppercase tracking-wider  ">
             <tr>
               {valuesTable.map((value, index) => {
-                return <th key={index}>{value}</th>;
+                return <th className="text-base" key={index}>{value}</th>;
               })}
             </tr>
           </thead>
@@ -38,37 +36,37 @@ export default UsersTable = () => {
             {users.map((value, index) => {
               return (
                 <tr key={index} className="border rounded-lg">
-                  <td className="px-5 py-5 border-b border-cyan-300 text-center bg-white text-sm text-sky-900">
+                  <td className="px-5 py-5 border-b border-blue-200 text-center  bg-slate-50 text-sm text-sky-900">
                     {value.nombres}
                   </td>
-                  <td className="px-5 py-5 border-b border-cyan-300 text-center bg-white text-sm text-pink-700">
+                  <td className="px-5 py-5 border-b border-blue-200 text-center bg-slate-50 text-sm text-sky-900">
                     {value.apellidoPaterno}
                   </td>
-                  <td className="px-5 py-5 border-b border-cyan-300 text-center bg-white text-sm text-sky-900">
+                  <td className="px-5 py-5 border-b border-blue-200 text-center bg-slate-50 text-sm text-sky-900">
                     {value.apellidoMaterno}
                   </td>
-                  <td className="px-5 py-5 border-b border-cyan-300 text-center bg-white text-sm text-pink-700">
+                  <td className="px-5 py-5 border-b border-blue-200 text-center bg-slate-50 text-sm text-sky-900">
                     {value.rut}
                   </td>
-                  <td className="px-5 py-5 border-b border-cyan-300 text-center bg-white text-sm text-sky-900">
+                  <td className="px-5 py-5 border-b border-blue-200 text-center bg-slate-50 text-sm text-sky-900">
                     {value.region}
                   </td>
-                  <td className="px-5 py-5 border-b border-cyan-300 text-center bg-white text-sm text-pink-700">
+                  <td className="px-5 py-5 border-b border-blue-200 text-center bg-slate-50 text-sm text-sky-900">
                     {value.comuna}
                   </td>
-                  <td className="px-5 py-5 border-b border-cyan-300 text-center bg-white text-sm text-sky-900">
+                  <td className="px-5 py-5 border-b border-blue-200 text-center bg-slate-50 text-sm text-sky-900">
                     {value.codigoPostal}
                   </td>
-                  <td className="px-5 py-5 border-b border-cyan-300 text-center bg-white text-sm">
+                  <td className="px-5 py-5 border-b border-blue-200 text-center bg-slate-50 text-sm">
                     <button
-                      className="group relative h-12 w-28 overflow-hidden rounded-lg bg-white text-lg shadow"
+                      className="group relative h-12 w-28 overflow-hidden rounded-lg bg-slate-50 text-lg shadow"
                       onClick={() => {
                         deleteUser(value);
                       }}
                     >
                       <div className="absolute inset-0 w-3 bg-red-300 transition-all duration-[250ms] ease-out group-hover:w-full"></div>
                       <span className="relative text-black group-hover:text-white my-5">
-                        Borrar Usuario
+                        Borrar
                       </span>
                     </button>
                   </td>
@@ -78,9 +76,7 @@ export default UsersTable = () => {
           </tbody>
         </table>
       ) : (
-        //</div>
-        //</div>
-        <h2 className=" flex justify-center text-green-600 font-semibold">
+        <h2 className=" flex justify-center text-sky-800 text-xl font-semibold">
           No hay usuarios registrados!{" "}
         </h2>
       )}

@@ -5,7 +5,7 @@ const validatorRut = (value) => {
 };
 
 const validatorRegion = (value) => {
-  return value !== "Seleccione Región";
+  return value !== "Seleccione Región"
 };
 
 const validatorComuna = (value) => {

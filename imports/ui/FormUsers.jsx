@@ -14,14 +14,14 @@ export default FormUsers = () => {
     reset,
     formState: { errors },
   } = useForm({
-    defaultValues: {},
+    defaultValues: { region: false, comuna: false },
   });
-  const regionSelected = watch("region");
-  useEffect(() => {
-    console.log(regionSelected);
-  }, [Locations, regionSelected]);
+  const [dataForPruebas, setDataForPruebas] = useState({});
+  const watchRegion = watch("region");
+  const watchComuna = watch("comuna");
 
   const onHandleSubmit = (data) => {
+    setDataForPruebas(data);
     let rutFormat = formatRut(data.rut);
     let rutOnUse = UsersCollection.find({ rut: rutFormat }).fetch();
     if (rutOnUse.length !== 0) {
@@ -38,7 +38,6 @@ export default FormUsers = () => {
         timer: 1500,
       });
       setTimeout(() => {
-        console.log(data.region, data.comuna);
         UsersCollection.insert({
           nombres: data.nombres,
           apellidoPaterno: data.apellidoPaterno,
@@ -49,13 +48,13 @@ export default FormUsers = () => {
           codigoPostal: data.codigoPostal,
         });
       }, 1500);
-      reset()
+      reset();
     }
   };
 
   const comunasForSelect =
     Locations[
-      Locations.indexOf(Locations.find((e) => e.region === regionSelected))
+      Locations.indexOf(Locations.find((e) => e.region === watchRegion))
     ]?.comunas || [];
 
   return (
@@ -150,9 +149,18 @@ export default FormUsers = () => {
             <input
               autoComplete="off"
               className="focus:border-sky-500 focus:outline-none shadow appearance-none border rounded w-full py-2 px-3 my-5 text-grey-darker"
-              {...register("rut", { required: true, validate: validateRut })}
+              {...register("rut", {
+                required: true,
+                validate: validateRut,
+                minLength: 8,
+              })}
               placeholder="Rut"
             />
+            {errors.rut?.type === "minLength" && (
+              <span className="text-red-400 text-xs italic">
+                Ingrese un rut válido
+              </span>
+            )}
             {errors.rut?.type === "required" && (
               <span className="text-red-400 text-xs italic">
                 Este campo es requerido
@@ -163,56 +171,78 @@ export default FormUsers = () => {
                 Ingrese un rut válido
               </span>
             )}
-            <select
-              className=" group dropdown focus:border-sky-500 focus:outline-none shadow appearance-none border rounded w-full py-2 px-3 my-5 text-grey-darker"
-              {...register("region", {
-                required: true,
-                validate: validatorRegion,
-              })}
-            >
-              <option
-                className="group-hover:block absolute hidden"
-                value={null}
-              >
-                Seleccione Región
-              </option>
-              {Locations?.map((e, index) => {
-                return (
-                  <option key={index} value={e.region}>
-                    {e.region}
-                  </option>
-                );
-              })}
-            </select>
+            <ul>
+              <li className=" bg-white group dropdown focus:outline-none shadow appearance-none border rounded w-full py-2 px-3 my-5 text-grey-darker">
+                <a value={null}>{watchRegion || "Seleccione Región"}</a>
+                <div className="group-hover:block dropdown-menu p-0 absolute hidden h-auto z-10">
+                  <ul className="top-0 w-full bg-white shadow px-6 py-8 z-10">
+                    {Locations.map((e, index) => {
+                      return (
+                        <li
+                          className="hover:bg-gray-200 cursor-pointer w-full"
+                          {...register("region", {
+                            required: true,
+                            validate: validatorRegion,
+                          })}
+                          key={index}
+                          onClick={() => {
+                            register().onChange({
+                              target: { value: e.region, name: "region" },
+                            });
+                          }}
+                        >
+                          {e.region}
+                        </li>
+                      );
+                    })}
+                  </ul>
+                </div>
+              </li>
+            </ul>
+            {errors.region?.type === "required" && (
+              <span className="text-red-400 text-xs italic">
+                Seleccione una región
+              </span>
+            )}
             {errors.region?.type === "validate" && (
               <span className="text-red-400 text-xs italic">
                 Seleccione una región
               </span>
             )}
-            {(regionSelected) && (
+
+            {watchRegion && watchRegion !== false && (
               <div>
-                <select
-                  className="focus:border-sky-500 focus:outline-none shadow appearance-none border rounded w-full py-2 px-3 my-5 text-grey-darker"
-                  {...register("comuna", {
-                    required: true,
-                    validate: validatorComuna,
-                  })}
-                >
-                  <option value={null}>Seleccione Comuna</option>
-                  {comunasForSelect?.map((e, index) => {
-                    return (
-                      <option key={index} value={e}>
-                        {e}
-                      </option>
-                    );
-                  })}
-                </select>
+                <ul>
+                  <li className=" bg-white group dropdown focus:outline-none shadow appearance-none border rounded w-full py-2 px-3 my-5 text-grey-darker">
+                    <a value={null} className="text-grey-darker">
+                      {watchComuna || "Seleccione Comuna"}
+                    </a>
+                    <div className="group-hover:block dropdown-menu absolute hidden h-auto z-10">
+                      <ul className="top-0 w-full bg-white shadow px-6 py-8">
+                        {comunasForSelect.map((e, index) => {
+                          return (
+                            <li
+                              className="hover:bg-gray-200 cursor-pointer w-full"
+                              {...register("comuna", {
+                                required: true,
+                                validate: validatorRegion,
+                              })}
+                              key={index}
+                              onClick={() => {
+                                register().onChange({
+                                  target: { value: e, name: "comuna" },
+                                });
+                              }}
+                            >
+                              {e}
+                            </li>
+                          );
+                        })}
+                      </ul>
+                    </div>
+                  </li>
+                </ul>
               </div>
-            )}
-            {errors.comuna?.type === "validate" && (
-              <span className="text-red-400 text-xs italic">
-                Seleccione una comuna
-              </span>
             )}
             {errors.comuna?.type === "required" && (
               <span className="text-red-400 text-xs italic">
@@ -220,6 +250,7 @@ export default FormUsers = () => {
               </span>
             )}
             <input
+              autoComplete="off"
               className="focus:border-sky-500 focus:outline-none shadow appearance-none border rounded w-full py-2 px-3 my-5 text-grey-darker"
               {...register("codigoPostal", { pattern: /^[0-9]{1,15}$/ })}
               name="codigoPostal"
