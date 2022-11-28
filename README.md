@@ -1,5 +1,5 @@
 # Proyecto test DocMovi
-El proyecto fue realizado con Meteor y estilado con TailwindCSS
+El proyecto fue realizado con Meteor y estilado con TailwindCSS. 
 Para inicializar el proyecto es necesario hacer un 'npm install' o "meteor npm install" 
 debido a las dependencias utilizadas.
 
